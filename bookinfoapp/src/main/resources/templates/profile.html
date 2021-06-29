@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Books</title>
+<link rel="stylesheet"
+	th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css}"
+	type="text/css" />
+
+
+</head>
+
+
+<body class="d-flex flex-column min-vh-100">
+	<div th:if="${#authorization.expression('isAnonymous()')}">
+		<div th:replace="fragments/header :: headerWhenUserIsntSignedIn"></div>
+	</div>
+
+	<div th:if="${#authorization.expression('!isAnonymous()')}">
+		<div th:replace="fragments/header :: headerWhenUserIsSignedIn"></div>
+	</div>
+
+	<main class="flex-grow-1 p-3 bd-highlight">
+		<h1 class=" text-center">My Profile</h1>
+		<div class="card border-dark p-1 mt-1 m-auto mb-5" style="width: 26rem;">
+			<div class="card-body">
+				<p>Username: </p><h5 class="card-title text-center" th:text="${user.username}" ></h5>
+				<p>Email:</p><h5 class="card-title text-center" th:text ="${user.email}" ></h5>
+				<p>Role:</p><h5 class="card-title text-center" th:each ="role : ${user.roles}" th:text="${role.roleName}"></h5>
+			</div>
+		</div>
+	
+		<div class="table-responsive w-auto m-auto mt-3">
+			<h2 class="text-center">My Activity</h2>
+			<table class="table table-hover w-25 m-auto caption-top">
+				<caption>List of books added by you</caption>
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Title</th>
+						<th scope="col">Author</th>
+						<th scope="col">Edit</th>
+						<th scope="col">Delete</th>						
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="table-secondary" th:each="book, iterStat: ${books}">
+	
+						<th th:text="${iterStat.count}"></th>
+						<td th:text="${book.title}"></td>
+						<td th:text="${book.author}"></td>
+						<td><a th:href="@{/editBook(bookId=${book.id})}">Edit</a></td>
+				        <td><form th:action="@{/removeBook(bookId=${book.id})}" method="post"><button class="btn btn-link p-0 m-0">Remove</button></form></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		
+		
+		<div class="table-responsive w-auto m-auto mt-3">
+			<table class="table table-hover w-25 m-auto caption-top">
+				<caption>List of comments posted by you</caption>
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Title</th>
+						<th scope="col">Comment</th>
+						<th scope="col">Edit</th>
+						<th scope="col">Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="table-secondary" th:each="comment, iterStat: ${userComments}">
+	
+						<th th:text="${iterStat.count}"></th>
+						<td th:text="${comment.book.title}"></td>
+						<td th:text="${comment.commentText}"></td>
+						<td><a th:href="@{/editComment(commentId=${comment.id})}">Edit</a></td>
+						<td><form th:action="@{/removeComment(commentId=${comment.id})}" method="post"><button class="btn btn-link p-0 m-0">Remove</button></form></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</main>
+	<footer th:replace="fragments/footer :: footer"></footer>
+
+	<script th:src="@{/webjars/bootstrap/5.0.0/js/bootstrap.bundle.js}"></script>
+</body>
+
+
+
+</html>

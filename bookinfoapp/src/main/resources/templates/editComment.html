@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit book</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css}" type="text/css"/>
+    
+<style>
+
+html {
+  overflow-y: scroll;
+}
+
+main{
+	background: rgb(211,213,218);
+	background: linear-gradient(212deg, rgba(211,213,218,1) 0%, rgba(157,157,163,1) 35%, rgba(156,168,171,1) 100%);	
+}
+
+</style>
+</head>
+
+
+<body class="d-flex flex-column min-vh-100">
+
+	<div th:if="${#authorization.expression('isAnonymous()')}">
+		<div th:replace="fragments/header :: headerWhenUserIsntSignedIn"></div>
+	</div>
+	
+	<div th:if="${#authorization.expression('!isAnonymous()')}">
+		<div th:replace="fragments/header :: headerWhenUserIsSignedIn"></div>
+	</div>
+	
+	<main class="flex-grow-1 p-2 bd-highlight d-flex align-items-center"> 
+		<div class="border border-dark mx-auto shadow-lg p-3 mb-5 bg-body rounded" id="el"style="height:550px;width:750px;">
+			<form class="display-grid" th:action="@{/editComment(commentId=${comment.id})}" th:object="${comment}" method="post">
+				<div class="row mb-4 mt-4 align-items-center">
+					<h2 class="text-center">Edit comment</h2>
+						
+						<div th:if="${param.error}" class="alert alert-danger mb-1 mt-1 w-50 m-auto text-center">
+							<p >Comment text can not be empty!</p>
+						</div>		
+						
+												<div th:if="${param.commentEditSuccess}" class="alert alert-success mb-1 mt-1 w-50 m-auto text-center">
+							<p >You have successfully saved changes to comment!</p>
+						</div>								
+						<div th:if="${#fields.hasErrors('*')}"  class="alert alert-danger mb-1 mt-1 pb-2 w-50 m-auto" role="alert">
+							<ul>
+						    	<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>   
+						    </ul> 
+						</div>					
+					
+				</div>	
+				<div class="row align-items-start mb-3">
+					<div class="col-2">
+						<label class="text-secondary">Title:</label>
+				 	</div>		
+				 	<div class="col-9">						
+					 	<h3 id="title" th:text="${book.title}"></h3>
+				 	</div>					
+				</div>	
+				
+				<div class="row align-items-start mb-3">
+					<div class="col-2">
+						<label class="text-secondary">Author:</label>
+				 	</div>		
+				 	<div class="col-9">						
+					 	<h3 id="author" th:text="${book.author}"></h3>
+				 	</div>					
+				</div>					
+				
+				<div class="row align-items-start mb-3">
+					<div class="col-2">
+						<label class="text-secondary" for="comment">Comment:</label>
+				 	</div>		
+				 	<div class="col-9">						
+					 	<textarea class="form-control"rows="5" cols="20" id="commentText" th:value="*{commentText}" th:text="*{commentText}"name="commentText">
+					 	</textarea>	
+				 	</div>					
+				</div>	
+				
+				
+				<div class="row justify-content-center ">
+				    	<a th:href="@{/profile}" class="btn btn-primary w-25 me-3">Go back</a>
+				    	<button type="submit" class="btn btn-primary w-25">Save changes</button>
+				</div>	
+
+			 	
+			</form>
+		</div>
+    
+	</main>
+	
+	<footer th:replace="fragments/footer :: footer"></footer> 
+
+	<script th:src="@{/webjars/bootstrap/5.0.0/js/bootstrap.bundle.js}"></script>
+</body>
+
+
+
+</html>
