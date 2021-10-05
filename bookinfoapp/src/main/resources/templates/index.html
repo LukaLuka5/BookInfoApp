@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Index</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css}" type="text/css"/>
+    
+<style>
+main{
+background: rgb(211,213,218);
+background: linear-gradient(212deg, rgba(211,213,218,1) 0%, rgba(157,157,163,1) 35%, rgba(156,168,171,1) 100%);
+}
+</style>
+</head>
+
+
+<body>
+
+	<div th:if="${#authorization.expression('isAnonymous()')}">
+		<div th:replace="fragments/header :: headerWhenUserIsntSignedIn"></div>
+	</div>
+	
+	<div th:if="${#authorization.expression('!isAnonymous()')}">
+		<div th:replace="fragments/header :: headerWhenUserIsSignedIn"></div>
+	</div>
+	
+	
+	<main> 
+    	<div class="text-center bg-light bg-gradient">
+    		<article class="col-md-5 p-lg-5 mx-auto ">
+				<h1 class="display-4 font-weight-bold">Find A Book To Read</h1>
+				<p class="lead font-weight-normal">Get a list of all books that users on this website read and 
+					check out their comments to see if they liked it!
+				</p>
+				<a class="btn btn-dark" th:href="@{/books?list1}">Click here to see books</a>
+			</article>
+   	   </div>
+    
+    	<div class="text-center bg-primary">
+    		<article class="col-md-5 p-lg-5 mx-auto my-5">
+				<h1 class="display-4 font-weight-bold text-light">Add the book you have read</h1>
+				<p class="lead font-weight-normal text-light">If u want to help us expand our database, feel 
+					free to add a book!
+				</p>
+				<a class="btn btn-dark" th:href="@{/addBook}">Click here to add a book</a>
+			</article>
+    	</div>
+ 
+     	<div class="text-center bg-secondary">
+    		<article class="col-md-5 p-lg-5 mx-auto my-5">
+				<h1 class="display-4 font-weight-bold text-light">Share your thoughts</h1>
+				<p class="lead font-weight-normal text-light">Give your take on a book that you liked or didnt like by
+					making a comment on a book!
+				</p>
+				<a class="btn btn-dark text-light" th:href="@{/books?list2}">Click here to add a comment</a>
+			</article>
+    	</div> 
+    	
+    	<footer th:replace="fragments/footer :: footer"></footer>  	
+    
+	</main>
+	<script th:src="@{/webjars/bootstrap/5.0.0/js/bootstrap.bundle.js}"></script>
+</body>
+
+
+
+</html>

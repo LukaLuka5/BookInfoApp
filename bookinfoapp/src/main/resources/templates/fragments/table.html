@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tables</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css}" type="text/css"/>
+
+
+</head>
+
+
+<body>
+
+	<div th:fragment="tableWhenUserIsSignedIn">
+		<div class="table-responsive m-auto" >
+			<h1 class="text-center">List of books</h1>
+			<table class="table table-hover w-50 m-auto caption-top">
+				<caption>List of all books added to the database</caption>
+				<thead>
+				    <tr>
+				    	<th scope="col">#</th>
+				        <th scope="col">Title</th>
+				        <th scope="col">Author</th>
+				        <th scope="col">Comments</th>				        
+				    </tr>
+			    </thead>
+			    <tbody>
+				    <tr class="table-secondary" th:each = "book, iterStat: ${books}">
+				    	<th th:text="${iterStat.count}"></th>
+				        <td th:text="${book.title}"></td>
+				        <td th:text="${book.author}"></td>
+				        <td><a th:href="@{/comments(bookId=${book.id})}">Click to see</a></td>
+				    </tr>
+			    </tbody>
+			</table>
+		</div>
+	</div>	
+	
+	
+	
+	
+	<div th:fragment="tableWhenUserIsNotSignedIn">
+		<div class="table-responsive w-auto m-auto" >
+			<h1 class="text-center">List of books</h1>
+			<table class="table table-hover w-50 m-auto caption-top">
+				<caption>List of all books added to the database</caption>
+				<thead>
+				    <tr>
+				    	<th scope="col">#</th>
+				        <th scope="col">Title</th>
+				        <th scope="col">Author</th>
+				        <th scope="col">Comments</th>
+				        
+				    </tr>
+			    </thead>
+			    <tbody>
+				    <tr class="table-secondary" th:each = "book, iterStat: ${books}">
+				    
+				    	<th th:text="${iterStat.count}"></th>
+				        <td th:text="${book.title}"></td>
+				        <td th:text="${book.author}"></td>
+				        <td><a th:href="@{/comments(bookId=${book.id})}">Click to see</a></td>
+
+				    </tr>
+			    </tbody>
+			</table>
+		</div>
+	</div>	
+	
+	
+	<div th:fragment="tableWhenUserIsChoosingToAddComment">
+		<div class="table-responsive w-auto m-auto" >
+			<h1 class="text-center">List of books</h1>
+			<table class="table table-hover w-50 m-auto caption-top">
+				<caption>List of all books added to the database</caption>
+				<thead>
+				    <tr>
+				    	<th scope="col">#</th>
+				        <th scope="col">Title</th>
+				        <th scope="col">Author</th>
+				        <th scope="col">Add comment</th>
+				        
+				    </tr>
+			    </thead>
+			    <tbody>
+				    <tr class="table-secondary" th:each = "book, iterStat: ${books}">
+				    
+				    	<th th:text="${iterStat.count}"></th>
+				        <td th:text="${book.title}"></td>
+				        <td th:text="${book.author}"></td>
+				        <td><a th:href="@{/addComment(bookId=${book.id})}">Add comment</a></td>
+
+				    </tr>
+			    </tbody>
+			</table>
+		</div>
+	</div>		
+
+
+	  
+
+
+<script th:src="@{/webjars/bootstrap/5.0.0/js/bootstrap.bundle.js}"></script>
+</body>
+
+
+
+</html>

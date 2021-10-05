@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Books</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css}" type="text/css"/>
+
+</head>
+
+
+<body class="d-flex flex-column min-vh-100">
+
+	<div th:if="${#authorization.expression('isAnonymous()')}">
+		<div th:replace="fragments/header :: headerWhenUserIsntSignedIn"></div>
+	</div>
+	
+	<div th:if="${#authorization.expression('!isAnonymous()')}">
+		<div th:replace="fragments/header :: headerWhenUserIsSignedIn"></div>
+	</div>
+	
+	
+	<main class="flex-grow-1 p-5 bd-highlight">
+		<div th:if="${param.list1}">
+			<div th:if="${#authorization.expression('isAnonymous()')}">
+				<table th:replace="fragments/table :: tableWhenUserIsNotSignedIn"></table>
+			</div>	
+			
+			<div th:if="${#authorization.expression('!isAnonymous()')}">
+				<table th:replace="fragments/table :: tableWhenUserIsSignedIn"></table>
+			</div>	
+		</div>	
+		
+		<div th:if="${param.list2}">			
+				<table th:replace="fragments/table :: tableWhenUserIsChoosingToAddComment"></table>		
+		</div>
+	</main>
+
+
+	<footer th:replace="fragments/footer :: footer"></footer>  
+
+
+<script th:src="@{/webjars/bootstrap/5.0.0/js/bootstrap.bundle.js}"></script>
+</body>
+
+
+
+</html>
