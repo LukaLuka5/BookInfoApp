@@ -5,41 +5,104 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login form</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css}" type="text/css"/>
-
+    
+<style>
+.form-floating p{
+	position: absolute;
+	visibility: hidden;
+}
+.form-floating.error p{
+	position: relative;
+	color:#e74c3c;
+	visibility: visible;
+	
+}
+</style>
 
 </head>
+
 <body>
 
 
 	<div class="text-center mt-5">
 		<h1 class="mt-3">BookInfoApp</h1>
-		<form class="card p-4" style="max-width:330px;margin:auto;">
+		<form  method="POST" class="card p-4" id="form" style="max-width:330px;margin:auto;">
+			<div th:if="${success}" th:text="${success}" class="alert alert-success"></div>
+			<div th:if="${param.logout}" class="alert alert-success">You have logged out successfuly</div>
 			<h2 class="fw-normal mb-3">Please sign in </h2>
 			
+			<div th:if="${param.error}">
+                        <div class="alert alert-danger">
+                            Invalid username or password.
+                        </div>
+			</div>
+			
 			<div class="form-floating mb-3">
-			  <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-			  <label class="text-secondary" for="floatingInput">Email address</label>
+			  <input type="text" th:name="username" class="form-control" id = "floatingUsername" placeholder="Username">
+			  <label class="text-secondary" for="floatingUsername">Username</label>
+			  <p>Error message</p>	
 			</div>
 			
 			<div class="form-floating">
-			  <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-			  <label class="text-secondary" for="floatingPassword">Password</label>
+			  <input type="password" th:name="password" class="form-control" id="floatingPassword" placeholder="Password">
+			  <label class="text-secondary" for="floatingPassword">Password</label>	
+			  <p>Error message</p>	  
 			</div>
 			
 			<div class="d-grid gap-2 mt-3">
-			  <button class="btn btn-primary" type="button">Sign in</button>
+			  <button class="btn btn-primary" type="submit">Sign in</button>
 			</div>
 			
-			<p class="mt-4" style="border-bottom:1px solid #6c757d;line-height: 0.1em;"><span class ="text-secondary" style="background:#fff;padding:0 10px;">Don't have an account?</span></p>
+			<p class="mt-4" style="border-bottom:1px solid #6c757d;line-height: 0.1em;">
+				<span class ="text-secondary" style="background:#fff;padding:0 10px;">Don't have an account?</span>
+			</p>
 			
 			<div class="d-grid gap-2">
-			  <button class="btn btn-secondary" type="button">Create an account</button>
+			  <a class="btn btn-secondary" th:href="@{/register}">Create an account</a>
 			</div>
+			
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			
 		</form>
 	</div>
 			
-	
-	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/5.0.0/js/bootstrap.bundle.js}"></script>
+		<script  type="text/javascript" >
+			
+			const form = document.getElementById('form');
+			const username = document.getElementById('floatingUsername');
+			const password = document.getElementById('floatingPassword');
+			
+			
+			form.addEventListener('submit',(e) => {
+				
+				
+				checkInputs(e);
+				
+				
+			});
+			
+			function checkInputs(e){
+				const usernameValue = username.value.trim();
+				const passwordValue = password.value.trim();
+				
+				if(usernameValue === ''){
+					setErrorFor(username, 'Username cant be blank');
+					e.preventDefault();
+				}
+				if(passwordValue === ''){
+					setErrorFor(password, 'Password cant be empty');
+					e.preventDefault();
+				}
+			}
+			function setErrorFor(input, message){
+				const formFloating = input.parentElement;
+				const p = formFloating.querySelector('p');
+				
+				p.innerText = message;				
+				formFloating.className = 'form-floating error';
+			
+			}
+	</script>
 </body>
 </html>
